@@ -10,13 +10,4 @@ export class AppController {
     private readonly appService: AppService,
     private readonly authSrv: AuthSrvice,
   ) {}
-  @Post('login')
-  login(@Body() req): any {
-    return this.authSrv.login(req);
-  }
-  @UseGuards(JwtAuthGurad)
-  @Get('pro')
-  getHello(): string {
-    return this.appService.getHello();
-  }
 }
