@@ -14,6 +14,8 @@ export const env = {
   },
   jwtSettings: {
     secret: '',
-    signOptions: '180s',
+    signOptions: {
+      expiresIn: '180s',
+    },
   } as JwtModuleOptions,
 };
