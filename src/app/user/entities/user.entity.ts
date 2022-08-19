@@ -15,7 +15,7 @@ export class User extends BaseEntity {
   id: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @ApiProperty()
@@ -24,8 +24,12 @@ export class User extends BaseEntity {
 
   @ApiProperty()
   @IsEmail()
-  @Column()
+  @Column({ unique: true })
   email: string;
+
+  @ApiProperty()
+  @Column()
+  password: string;
 
   @ApiProperty()
   @Column({
@@ -49,5 +53,5 @@ export class User extends BaseEntity {
 
   @ApiProperty({ required: false })
   @Column({ nullable: true })
-  profilePic: string;
+  profilePic?: string;
 }

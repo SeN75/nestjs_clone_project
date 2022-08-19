@@ -1,22 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from 'src/app/user/user.service';
+import { LoginDto } from './login.dto';
 
 @Injectable()
 export class AuthSrvice {
-  constructor(private jwtSrv: JwtService) {}
-  async validaterUser(username: string, password: string): Promise<any> {
-    const user = { username, password };
-    if (user && user.password === password) {
-      const { password, username, ...rset } = user;
-      return rset;
-    }
-    return null;
+  constructor(private jwtSrv: JwtService, private userSrv: UserService) {}
+  async validator(loginDto: LoginDto) {
+    const user = await this.userSrv
+      .login(loginDto)
+      .then((userExist) => userExist)
+      .catch(() => {
+        throw new NotFoundException();
+      });
+    return user;
   }
-  async login(user: any) {
-    user.username = 'saleh';
-    user.password = '123456';
-    console.log('data ---> ', user);
-    const payload = { name: user.username, sub: user.id };
+  async login(loginDto: LoginDto) {
+    const user = await this.validator(loginDto);
+    const payload = { ...user };
     return {
       access_token: this.jwtSrv.sign(payload),
     };
