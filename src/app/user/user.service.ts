@@ -3,6 +3,8 @@ import {
   Injectable,
   HttpStatus,
   ConflictException,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -41,24 +43,59 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userRepo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.userRepo
+      .findOneOrFail({ where: { id } })
+      .then((u) => u)
+      .catch(() => {
+        throw new NotFoundException('user not found or exist!!');
+      });
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+
+    if (updateUserDto['id'])
+      throw new BadRequestException("id can't be changed");
+
+    const updateData = { ...user, ...updateUserDto };
+    return await this.userRepo
+      .save(updateData)
+      .then(() => {
+        return {
+          data: updateUserDto,
+          message: 'user update information successfully',
+        };
+      })
+      .catch((err) => {
+        throw new HttpException({}, HttpStatus.BAD_REQUEST);
+      });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.userRepo
+      .delete(id)
+      .then(() => {
+        return { message: `user deleted successfully` };
+      })
+      .catch(() => {
+        throw new NotFoundException('user not found or exist!!');
+      });
+    return user;
   }
   async login(loginDto: LoginDto) {
     const requst = await this.userRepo.findOneOrFail({
       where: [{ password: loginDto.password, email: loginDto.email }],
     });
     return requst;
+  }
+
+  async findOneByEmail(email: string) {
+    const user = await this.userRepo.findOneOrFail({ where: { email } });
+    return user;
   }
 }

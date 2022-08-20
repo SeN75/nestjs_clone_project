@@ -1,11 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
+import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
 @ApiTags('User')
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @ApiProperty()
-  id: string;
-
   @ApiPropertyOptional({ maxLength: 25 })
   name?: string;
 
@@ -17,6 +14,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @ApiPropertyOptional({
     pattern: '/^w+[+.w-]*@([w-]+.)*w+[w-]*.([a-z]{2,4}|d+)$/i',
+    example: 'email@email.com',
   })
   email?: string;
 
