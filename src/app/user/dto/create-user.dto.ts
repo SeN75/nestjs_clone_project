@@ -14,6 +14,7 @@ export class CreateUserDto {
   @ApiProperty({
     type: 'string',
     pattern: '/^w+[+.w-]*@([w-]+.)*w+[w-]*.([a-z]{2,4}|d+)$/i',
+    example: 'email@example.com',
   })
   email: string;
   @ApiProperty()
@@ -22,6 +23,5 @@ export class CreateUserDto {
   @ApiProperty({
     examples: Object.keys(UserRole).map((value) => value.toLowerCase()),
   })
-  @IsNotEmpty()
-  role: UserRole;
+  role?: UserRole;
 }

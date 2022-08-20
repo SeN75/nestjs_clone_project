@@ -15,6 +15,7 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiOkResponse,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGurad } from 'src/auth/jwt-auth.guard';
@@ -31,12 +32,11 @@ export class UserController {
     const user = await this.userService.create(createUserDto);
     return user;
   }
-
+  @ApiResponse({ isArray: true, description: 'returns all users', status: 200 })
   @Get()
   async findAll() {
     return await this.userService.findAll();
   }
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.userService.findOne(id);

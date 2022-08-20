@@ -4,7 +4,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'admin',
-  VENDOR = 'vendor',
+  SELLER = 'seller',
   CLIENT = 'client',
   GUST = 'gust',
 }

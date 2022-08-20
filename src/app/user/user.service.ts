@@ -11,7 +11,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from '../../auth/login.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -20,6 +20,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     //
     try {
+      if (!createUserDto.role) createUserDto.role = UserRole.GUST;
       const user = await this.userRepo.create({
         name: createUserDto.name,
         email: createUserDto.email,
@@ -42,11 +43,11 @@ export class UserService {
     }
   }
 
-  findAll() {
-    return this.userRepo.find();
+  async findAll(): Promise<User[]> {
+    return await this.userRepo.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<User> {
     const user = await this.userRepo
       .findOneOrFail({ where: { id } })
       .then((u) => u)

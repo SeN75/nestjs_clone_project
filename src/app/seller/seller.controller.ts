@@ -1,16 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { SellerService } from './seller.service';
-import { CreateSellerDto } from './dto/create-seller.dto';
-import { UpdateSellerDto } from './dto/update-seller.dto';
+
 import { ApiTags } from '@nestjs/swagger';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 
 @ApiTags('Seller')
 @Controller('seller')
@@ -18,7 +10,7 @@ export class SellerController {
   constructor(private readonly sellerService: SellerService) {}
 
   @Post()
-  create(@Body() createSellerDto: CreateSellerDto) {
+  create(@Body() createSellerDto: CreateUserDto) {
     return this.sellerService.create(createSellerDto);
   }
 
@@ -29,16 +21,6 @@ export class SellerController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.sellerService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSellerDto: UpdateSellerDto) {
-    return this.sellerService.update(+id, updateSellerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sellerService.remove(+id);
+    return this.sellerService.findOne(id);
   }
 }
