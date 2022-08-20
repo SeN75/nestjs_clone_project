@@ -27,4 +27,13 @@ export class AuthSrvice {
       access_token: this.jwtSrv.sign(payload),
     };
   }
+
+  async forgetPassword(email: string) {
+    const user = await this.userSrv
+      .findOneByEmail(email)
+      .then((u) => u)
+      .catch(() => {
+        throw new NotFoundException();
+      });
+  }
 }
