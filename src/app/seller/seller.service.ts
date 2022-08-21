@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -31,6 +35,11 @@ export class SellerService {
   }
 
   async findOne(id: string): Promise<Seller> {
-    return await this.sellerRepo.findOneOrFail({ where: { id } });
+    return await this.sellerRepo
+      .findOneOrFail({ where: { id } })
+      .then((u) => u)
+      .catch((erro) => {
+        throw new NotFoundException('seller not exist!!');
+      });
   }
 }

@@ -11,20 +11,17 @@ import {
 import { Order } from '../../order/entities/order.entity';
 @Entity()
 export class Client {
-  @OneToOne(() => User, (u) => u.id)
-  @PrimaryColumn()
+  @PrimaryColumn({ unique: true, nullable: false })
   @ApiProperty()
   id: string;
   @ApiProperty()
-  @Column()
+  @Column({ default: 0 })
   balance: number;
   @ApiProperty()
-  @Column('text', { array: true, default: '{}' })
-  //
-  @OneToMany(() => Order, (order) => order.id)
-  historyOrder: string[];
+  @OneToMany(() => Order, (order) => order.userHistoryOrder, { cascade: true })
+  historyOrder: Array<Order>;
   @ApiProperty()
-  @JoinColumn()
-  @OneToOne(() => Order, (order) => order.id)
+  @OneToOne(() => Order, (order) => order.id, { cascade: true })
+  @JoinColumn({ name: 'currentOrderId' })
   currentOrder: string;
 }

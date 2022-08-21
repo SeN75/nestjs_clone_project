@@ -59,4 +59,7 @@ export class Order extends BaseEntity {
   @ApiProperty()
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.NEW })
   status: OrderStatus;
+
+  @ManyToOne(() => Client, (client) => client.historyOrder)
+  userHistoryOrder: Client;
 }
