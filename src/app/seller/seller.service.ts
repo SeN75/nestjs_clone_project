@@ -31,7 +31,7 @@ export class SellerService {
   }
 
   async findAll(): Promise<Seller[]> {
-    return await this.sellerRepo.find();
+    return await this.sellerRepo.find({ relations: ['user'] });
   }
 
   async findOne(id: string): Promise<Seller> {

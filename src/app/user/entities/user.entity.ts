@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail } from 'class-validator';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Seller } from 'src/app/seller/entities/seller.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -54,4 +61,7 @@ export class User extends BaseEntity {
   @ApiProperty({ required: false })
   @Column({ nullable: true })
   profilePic?: string;
+
+  @OneToOne(() => Seller, (seller) => seller.user)
+  seller: Seller;
 }
