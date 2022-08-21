@@ -7,11 +7,12 @@ import {
   OneToMany,
   OneToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 @Entity()
 export class Seller {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
   id: string;
   @ApiProperty({ isArray: true })

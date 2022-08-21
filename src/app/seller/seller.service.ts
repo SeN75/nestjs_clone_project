@@ -21,7 +21,7 @@ export class SellerService {
   async create(createSellerDto: CreateUserDto) {
     createSellerDto.role = UserRole.SELLER;
     const newUser = await this.userSrv.create(createSellerDto);
-    const newSeller = this.sellerRepo.create({ id: newUser.id });
+    const newSeller = this.sellerRepo.create({ user: newUser });
     return await this.sellerRepo
       .save(newSeller)
       .then((seller) => seller)

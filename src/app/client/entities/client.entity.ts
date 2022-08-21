@@ -7,11 +7,12 @@ import {
   OneToMany,
   OneToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Order } from '../../order/entities/order.entity';
 @Entity()
 export class Client {
-  @PrimaryColumn({ unique: true, nullable: false })
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
   id: string;
   @ApiProperty()
@@ -24,4 +25,8 @@ export class Client {
   @OneToOne(() => Order, (order) => order.id, { cascade: true })
   @JoinColumn({ name: 'currentOrderId' })
   currentOrder: string;
+
+  @OneToOne(() => User, (user) => user.client)
+  @JoinColumn()
+  user: User;
 }

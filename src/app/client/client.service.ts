@@ -27,7 +27,7 @@ export class ClientService {
     createClientDto.role = UserRole.CLIENT;
     const client = await this.userSrv.create(createClientDto);
     const newClient = await this.clientRepo.create({
-      id: client.id,
+      user: client,
     });
     return await this.clientRepo
       .save(newClient)
@@ -38,14 +38,17 @@ export class ClientService {
   }
 
   async findAll(
-    relitions = ['currentOrder', 'historyOrder'],
+    relitions = ['currentOrder', 'historyOrder', 'user'],
   ): Promise<Client[]> {
     return await this.clientRepo.find({
       relations: relitions,
     });
   }
 
-  async findOne(id: string, relitions = ['currentOrder', 'historyOrder']) {
+  async findOne(
+    id: string,
+    relitions = ['currentOrder', 'historyOrder', 'user'],
+  ) {
     const client = await this.clientRepo
       .findOneOrFail({
         where: { id },
