@@ -5,9 +5,13 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Cart } from 'src/app/cart/entities/cart.entity';
+import { Category } from 'src/app/category/entities/category.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -35,8 +39,19 @@ export class Product extends BaseEntity {
   @ApiProperty()
   @Column({ default: 1 })
   quntity: number;
+  @ApiProperty()
+  @Column()
+  sellerId: string;
+
+  @ApiProperty()
+  @ManyToOne(() => Category, (cate) => cate.product)
+  categories: Category[];
 
   @ApiPropertyOptional()
-  @OneToOne(() => Seller, (seller) => seller.id)
-  vendorId: string;
+  @OneToOne(() => Seller, (seller) => seller.products)
+  seller: Seller;
+
+  @ApiPropertyOptional()
+  @ManyToOne(() => Cart, (cart) => cart.products)
+  cart: Cart;
 }

@@ -18,17 +18,10 @@ export class Cart extends BaseEntity {
   id: string;
 
   @ApiProperty()
-  @Column()
   @OneToOne(() => Client, (client) => client.id)
-  clientId: string;
+  client: Client;
 
   @ApiProperty({ isArray: true })
-  @Column('text', { array: true, default: '{}' })
-  @ManyToOne(() => Seller, (sellers) => sellers.id)
-  sellersIds: string[];
-
-  @ApiProperty({ isArray: true })
-  @Column('text', { array: true, default: '{}' })
-  @ManyToOne(() => Product, (product) => product.id)
-  products: string[];
+  @ManyToOne(() => Product, (product) => product.cart)
+  products: Product[];
 }

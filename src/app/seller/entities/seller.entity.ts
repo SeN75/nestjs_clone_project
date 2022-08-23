@@ -16,9 +16,8 @@ export class Seller {
   @ApiProperty()
   id: string;
   @ApiProperty({ isArray: true })
-  @OneToMany(() => Product, (prod) => prod.id)
-  @Column('text', { array: true, default: '{}' })
-  productsId: string[];
+  @OneToMany(() => Product, (prod) => prod.seller)
+  products: Product[];
 
   @OneToOne(() => User, (user) => user.seller)
   @JoinColumn()

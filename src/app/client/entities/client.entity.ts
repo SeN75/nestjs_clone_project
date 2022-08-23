@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Order } from '../../order/entities/order.entity';
+import { Cart } from 'src/app/cart/entities/cart.entity';
 @Entity()
 export class Client {
   @PrimaryGeneratedColumn('uuid')
@@ -29,4 +30,7 @@ export class Client {
   @OneToOne(() => User, (user) => user.client)
   @JoinColumn()
   user: User;
+
+  @OneToOne(() => Cart, (cart) => cart.client)
+  cart: Cart;
 }
