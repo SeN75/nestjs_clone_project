@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from '../../user/entities/user.entity';
 import {
   Column,
@@ -20,16 +20,13 @@ export class Client {
   @Column({ default: 0 })
   balance: number;
 
-  @ApiProperty()
   @OneToMany(() => Order, (order) => order.userHistoryOrder, { cascade: true })
-  historyOrder: Array<Order>;
+  historyOrder?: Array<Order>;
 
-  @ApiProperty({ type: () => Order })
   @OneToOne(() => Order, (order) => order.currentOrder)
   @JoinColumn()
-  currentOrder: Order;
+  currentOrder?: Order;
 
-  @ApiProperty()
   @OneToOne(() => Order, (order) => order.client, { cascade: true })
   order: Order;
 

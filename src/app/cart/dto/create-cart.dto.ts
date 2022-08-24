@@ -4,11 +4,11 @@ import { Client } from 'src/app/client/entities/client.entity';
 import { Product } from 'src/app/product/entities/product.entity';
 
 export class CreateCartDto {
-  @ApiProperty()
+  @ApiProperty({ type: () => Client })
   @IsNotEmpty()
   client: Client;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => Product })
   @IsArray()
   @IsNotEmpty()
   products: Product[];

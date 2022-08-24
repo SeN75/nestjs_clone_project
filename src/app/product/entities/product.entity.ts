@@ -44,15 +44,12 @@ export class Product extends BaseEntity {
   @Column()
   sellerId: string;
 
-  @ApiProperty()
   @ManyToOne(() => Category, (cate) => cate.product)
   categories: Category[];
 
-  @ApiPropertyOptional()
   @OneToOne(() => Seller, (seller) => seller.products)
   seller: Seller;
 
-  @ApiPropertyOptional()
   @ManyToOne(() => Cart, (cart) => cart.products)
   cart: Cart;
 }

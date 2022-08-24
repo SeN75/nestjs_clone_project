@@ -12,7 +12,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-enum OrderStatus {
+export enum OrderStatus {
   NEW = 'new',
   DELETED = 'deleted',
   REJECT = 'reject',
@@ -31,20 +31,6 @@ export class Order extends BaseEntity {
   address: string;
 
   @ApiProperty()
-  @OneToOne(() => Cart, (cart) => cart.order)
-  @Column()
-  cart: string;
-
-  @ApiProperty({ type: () => Client })
-  @OneToOne(() => Client, (client) => client.currentOrder, { cascade: true })
-  currentOrder: Client;
-
-  @ApiProperty({ type: () => Client })
-  @OneToOne(() => Client, (client) => client.order)
-  @JoinColumn()
-  client: Client;
-
-  @ApiProperty()
   @Column({ default: 0 })
   totalPrice: number;
 
@@ -52,14 +38,25 @@ export class Order extends BaseEntity {
   @Column({ default: 0 })
   discount: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @Column()
   paymentMethod: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'enum', enum: OrderStatus })
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.NEW })
   status: OrderStatus;
 
   @ManyToOne(() => Client, (client) => client.historyOrder)
   userHistoryOrder: Client;
+
+  @OneToOne(() => Cart, (cart) => cart.order)
+  @JoinColumn()
+  cart: Cart;
+
+  @OneToOne(() => Client, (client) => client.currentOrder, { cascade: true })
+  currentOrder: Client;
+
+  @OneToOne(() => Client, (client) => client.order)
+  @JoinColumn()
+  client: Client;
 }
