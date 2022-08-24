@@ -6,6 +6,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -30,19 +31,18 @@ export class Order extends BaseEntity {
   address: string;
 
   @ApiProperty()
-  @OneToOne(() => Cart, (cart) => cart.id)
+  @OneToOne(() => Cart, (cart) => cart.order)
   @Column()
   cart: string;
 
-  @ApiProperty()
-  @Column()
-  @OneToOne(() => Client, (client) => client.id)
-  clientId: string;
+  @ApiProperty({ type: () => Client })
+  @OneToOne(() => Client, (client) => client.currentOrder, { cascade: true })
+  currentOrder: Client;
 
-  @ApiProperty()
-  @Column('text', { array: true, default: '{}' })
-  @ManyToOne(() => Seller, (seller) => seller.id)
-  sellersIds: string[];
+  @ApiProperty({ type: () => Client })
+  @OneToOne(() => Client, (client) => client.order)
+  @JoinColumn()
+  client: Client;
 
   @ApiProperty()
   @Column({ default: 0 })

@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -54,7 +49,17 @@ export class CategoryService {
     }
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    const category = await this.categoryRepo
+      .delete(id)
+      .then((cate) => {
+        return cate;
+      })
+      .catch((err) => {
+        console.error('error ===> ', err);
+        throw new HttpException({}, HttpStatus.NOT_FOUND);
+      });
+
+    return category;
   }
 }

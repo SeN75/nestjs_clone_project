@@ -19,18 +19,25 @@ export class Client {
   @ApiProperty()
   @Column({ default: 0 })
   balance: number;
+
   @ApiProperty()
   @OneToMany(() => Order, (order) => order.userHistoryOrder, { cascade: true })
   historyOrder: Array<Order>;
+
+  @ApiProperty({ type: () => Order })
+  @OneToOne(() => Order, (order) => order.currentOrder)
+  @JoinColumn()
+  currentOrder: Order;
+
   @ApiProperty()
-  @OneToOne(() => Order, (order) => order.id, { cascade: true })
-  @JoinColumn({ name: 'currentOrderId' })
-  currentOrder: string;
+  @OneToOne(() => Order, (order) => order.client, { cascade: true })
+  order: Order;
 
   @OneToOne(() => User, (user) => user.client)
   @JoinColumn()
   user: User;
 
   @OneToOne(() => Cart, (cart) => cart.client)
+  @JoinColumn()
   cart: Cart;
 }
