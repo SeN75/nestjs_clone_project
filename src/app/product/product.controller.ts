@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -17,27 +18,31 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  async create(@Body() createProductDto: CreateProductDto) {
+    return await this.productService.create(createProductDto);
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  async findAll(@Query('sellerId') sellerId) {
+    console.log('sellerId =========> ', sellerId);
+    return await this.productService.findAll(sellerId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.productService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    return await this.productService.update(id, updateProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.productService.remove(id);
   }
 }

@@ -30,15 +30,16 @@ export class Product extends BaseEntity {
 
   @ApiProperty()
   @Column({ width: 400 })
-  descripition: string;
+  description: string;
 
   @ApiProperty()
   @Column({ default: 0 })
-  rate: number;
+  timesOrder: number;
 
   @ApiProperty()
   @Column({ default: 1 })
   quntity: number;
+
   @ApiProperty()
   @Column()
   sellerId: string;
