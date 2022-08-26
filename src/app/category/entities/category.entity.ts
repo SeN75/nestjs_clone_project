@@ -7,10 +7,10 @@ export class Category {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty()
-  @Column()
+  @ApiProperty({ uniqueItems: true })
+  @Column({ unique: true, nullable: true })
   name: string;
 
-  @OneToMany(() => Product, (prod) => prod.categories)
-  product: Product;
+  // @OneToMany(() => Product, (prod) => prod.categories)
+  // product: Product;
 }

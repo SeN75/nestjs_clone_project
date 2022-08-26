@@ -18,7 +18,10 @@ export class CategoryService {
         throw new HttpException('categroy_aleady_exist', HttpStatus.NOT_FOUND);
       return category;
     } catch (error) {
-      throw new HttpException({}, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        { message: error.detail } || {},
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -30,21 +33,40 @@ export class CategoryService {
       throw new HttpException('categories_not_found', HttpStatus.NOT_FOUND);
     }
   }
-
+  async findAllByIds(ids: string[]) {
+    const arr = ids.map((id) => {
+      return { id };
+    });
+    try {
+      const catgories = await this.categoryRepo.findBy(arr);
+      return catgories;
+    } catch (erro) {
+      console.log('erro ====> ', erro);
+      throw new HttpException(
+        'some_or_all_categories_not_found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
   async findOne(id: string) {
-    const category = await this.categoryRepo.findOneByOrFail({ id });
-    if (!category)
+    try {
+      const category = await this.categoryRepo.findOneByOrFail({ id });
+      return category;
+    } catch (err) {
       throw new HttpException('category_not_found', HttpStatus.NOT_FOUND);
-    return category;
+    }
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.findOne(id);
+    if (Object.keys(updateCategoryDto).length == 0)
+      throw new HttpException('body_empty', HttpStatus.BAD_REQUEST);
     const updatedCate = { ...category, ...updateCategoryDto };
 
     try {
       return await this.categoryRepo.save(updatedCate);
     } catch (error) {
+      console.error('error ===> ', error);
       throw new HttpException({}, HttpStatus.BAD_REQUEST);
     }
   }
@@ -53,11 +75,10 @@ export class CategoryService {
     const category = await this.categoryRepo
       .delete(id)
       .then((cate) => {
-        return cate;
+        return { message: 'category_deleted_successfully' };
       })
       .catch((err) => {
-        console.error('error ===> ', err);
-        throw new HttpException({}, HttpStatus.NOT_FOUND);
+        throw new HttpException('category_not_found', HttpStatus.NOT_FOUND);
       });
 
     return category;
