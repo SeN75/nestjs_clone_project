@@ -1,16 +1,17 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../../user/entities/user.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   OneToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Order } from '../../order/entities/order.entity';
-import { Cart } from 'src/app/cart/entities/cart.entity';
+import { Cart } from '../../cart/entities/cart.entity';
 @Entity()
 export class Client {
   @PrimaryGeneratedColumn('uuid')
@@ -20,12 +21,13 @@ export class Client {
   @Column({ default: 0 })
   balance: number;
 
-  @OneToMany(() => Order, (order) => order.userHistoryOrder, { cascade: true })
+  @ManyToMany(() => Order)
+  @JoinTable()
   historyOrder?: Array<Order>;
 
   @OneToOne(() => Order, (order) => order.currentOrder)
   @JoinColumn()
-  currentOrder?: Order;
+  currentOrder: Order;
 
   @OneToOne(() => Order, (order) => order.client, { cascade: true })
   order: Order;

@@ -1,17 +1,17 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDecimal } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 import { Seller } from '../../seller/entities/seller.entity';
 import {
   BaseEntity,
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Cart } from 'src/app/cart/entities/cart.entity';
-import { Category } from 'src/app/category/entities/category.entity';
+import { Cart } from '../../cart/entities/cart.entity';
+import { Category } from '../../category/entities/category.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -24,8 +24,7 @@ export class Product extends BaseEntity {
   name: string;
 
   @ApiProperty()
-  @Column({ type: 'decimal' })
-  @IsDecimal()
+  @Column({ type: 'float', default: 0 })
   price: number;
 
   @ApiProperty()
@@ -44,7 +43,9 @@ export class Product extends BaseEntity {
   @Column()
   sellerId: string;
 
-  @ManyToOne(() => Category, (cate) => cate.product)
+  @ApiProperty({ type: () => Category, nullable: true, default: [] })
+  @ManyToMany(() => Category, { cascade: true })
+  @JoinTable()
   categories: Category[];
 
   @OneToOne(() => Seller, (seller) => seller.products)

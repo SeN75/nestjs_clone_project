@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail } from 'class-validator';
-import { Client } from 'src/app/client/entities/client.entity';
-import { Seller } from 'src/app/seller/entities/seller.entity';
+import { Client } from '../../client/entities/client.entity';
+import { Seller } from '../../seller/entities/seller.entity';
 import {
   BaseEntity,
   Column,

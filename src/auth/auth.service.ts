@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/app/user/user.service';
+import { UserService } from '../app/user/user.service';
 import { LoginDto } from './login.dto';
 
 @Injectable()

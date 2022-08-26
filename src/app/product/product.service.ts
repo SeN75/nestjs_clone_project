@@ -8,6 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResponseObj } from 'src/types/respons.type';
 import { Repository } from 'typeorm';
+import { CategoryService } from '../category/category.service';
 import { SellerService } from '../seller/seller.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -18,6 +19,7 @@ export class ProductService {
   constructor(
     @InjectRepository(Product) private prodRepo: Repository<Product>,
     private readonly sellerSrv: SellerService,
+    private readonly cateSrv: CategoryService,
   ) {}
 
   async create(
@@ -30,14 +32,22 @@ export class ProductService {
         HttpStatus.NOT_FOUND,
         createProductDto.sellerId,
       );
+    // let categories;
+    // if (createProductDto.categories.length > 0)
+    //   categories = await this.cateSrv.findAllByIds(
+    //     createProductDto.categories.map((c) => c.id),
+    //   );
+    // console.log('product categories =========> ', categories);
+    // console.log('createProductDto =========> ', createProductDto);
     const prod = await this.prodRepo.create(createProductDto);
     const respone = await this.prodRepo
       .save(prod)
       .then((p) => this.res('new_product_created', HttpStatus.CREATED, p))
-      .catch((err) =>
-        this.res('create_product_failed', HttpStatus.NOT_FOUND, err),
-      );
-    return await respone;
+      .catch((err) => {
+        console.log('error ====> ', err);
+        throw new HttpException('create_product_failed', HttpStatus.NOT_FOUND);
+      });
+    return respone;
   }
 
   async findAll(sellerId = ''): Promise<ResponseObj<Product[]>> {
@@ -46,9 +56,10 @@ export class ProductService {
     });
     const response = await products
       .then((prod) => this.resAll('products_exist', HttpStatus.ACCEPTED, prod))
-      .catch((err) =>
-        this.resAll('products_not_found', HttpStatus.NOT_FOUND, err),
-      );
+      .catch((err) => {
+        console.log('error ====> ', err);
+        throw new HttpException({}, HttpStatus.NOT_FOUND);
+      });
     return response;
   }
 

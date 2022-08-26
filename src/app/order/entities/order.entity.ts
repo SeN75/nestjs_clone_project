@@ -27,7 +27,7 @@ export class Order extends BaseEntity {
   id: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: true })
   address: string;
 
   @ApiProperty()
@@ -39,17 +39,19 @@ export class Order extends BaseEntity {
   discount: number;
 
   @ApiPropertyOptional()
-  @Column()
-  paymentMethod: string;
+  @Column({ nullable: true })
+  paymentMethod?: string;
 
   @ApiProperty({ type: 'enum', enum: OrderStatus })
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.NEW })
   status: OrderStatus;
-
+  @ApiProperty()
+  @Column({ default: new Date() })
+  createdDate: Date;
   @ManyToOne(() => Client, (client) => client.historyOrder)
   userHistoryOrder: Client;
 
-  @OneToOne(() => Cart, (cart) => cart.order)
+  @OneToOne(() => Cart)
   @JoinColumn()
   cart: Cart;
 

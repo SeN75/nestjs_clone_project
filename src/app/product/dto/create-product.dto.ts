@@ -7,6 +7,7 @@ import {
   Max,
   MaxLength,
 } from 'class-validator';
+import { Category } from '../../category/entities/category.entity';
 
 export class CreateProductDto {
   @ApiProperty()
@@ -34,4 +35,7 @@ export class CreateProductDto {
   @IsString()
   @IsNotEmpty({ message: 'sellerId_required' })
   sellerId: string;
+
+  // @ApiProperty()
+  // categories: Category[];
 }
