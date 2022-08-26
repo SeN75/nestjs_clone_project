@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty } from 'class-validator';
-import { Client } from 'src/app/client/entities/client.entity';
-import { Product } from 'src/app/product/entities/product.entity';
+import { Client } from '../../client/entities/client.entity';
+import { Product } from '../../product/entities/product.entity';
 
 export class CreateCartDto {
   @ApiProperty({ type: () => Client })

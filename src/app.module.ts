@@ -17,6 +17,7 @@ import { LocalStrategy } from './auth/local.strategy';
 
 import { JwtStrategy } from './auth/jwt-auth.stratgy';
 import { User } from './app/user/entities/user.entity';
+import { CategoryModule } from './app/category/category.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(TypeOrmConfigOption),
@@ -26,6 +27,7 @@ import { User } from './app/user/entities/user.entity';
     CartModule,
     ProductModule,
     OrderModule,
+    CategoryModule,
     AuthModule,
   ],
   controllers: [AppController],

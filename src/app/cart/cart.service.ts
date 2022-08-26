@@ -49,8 +49,14 @@ export class CartService {
   }
 
   async remove(id: string) {
-    const cart = await this.cartRepo.delete(id);
-    if (!cart) throw new HttpException('cart_not_found', HttpStatus.NOT_FOUND);
-    return cart;
+    try {
+      this.update(id, { client: null, products: [] });
+      const dd = await this.findOne(id);
+      const cart = await this.cartRepo.remove(dd);
+      return cart;
+    } catch (err) {
+      console.log('error ====> ', err);
+      throw new HttpException('cart_not_found', HttpStatus.NOT_FOUND);
+    }
   }
 }
